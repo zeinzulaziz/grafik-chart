@@ -355,12 +355,46 @@ const myBubbleChart = new Chart(ctx, {
                 const dataIndex = firstPoint.index;
                 const clickedData = myBubbleChart.data.datasets[datasetIndex].data[dataIndex];
 
-                // Panggil fungsi untuk menampilkan modal
+                // Update info box dan juga tampilkan modal
+                updateInfoBox(clickedData.title, clickedData.details);
                 showModal(clickedData.title, clickedData.details);
             }
         }
     }
 });
+
+// --- LOGIKA INFO BOX (Selalu Tampil) ---
+const infoBoxTitle = document.getElementById("infoBoxTitle");
+const infoBoxContent = document.getElementById("infoBoxContent");
+
+function updateInfoBox(title, content) {
+    infoBoxTitle.innerHTML = title;
+    infoBoxContent.innerHTML = content;
+}
+
+// Event listener untuk hover pada canvas
+const canvas = document.getElementById('myBubbleChart');
+canvas.addEventListener('mousemove', (e) => {
+    const points = myBubbleChart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+    
+    if (points.length > 0) {
+        const firstPoint = points[0];
+        const datasetIndex = firstPoint.datasetIndex;
+        const dataIndex = firstPoint.index;
+        const hoveredData = myBubbleChart.data.datasets[datasetIndex].data[dataIndex];
+
+        // Update info box saat hover
+        updateInfoBox(hoveredData.title, hoveredData.details);
+    }
+});
+
+// Set default info box dengan cluster pertama setelah chart dibuat
+setTimeout(() => {
+    const defaultData = myBubbleChart.data.datasets[0].data[0];
+    if (defaultData) {
+        updateInfoBox(defaultData.title, defaultData.details);
+    }
+}, 100);
 
 // --- LOGIKA MODAL ---
 const modal = document.getElementById("dataModal");

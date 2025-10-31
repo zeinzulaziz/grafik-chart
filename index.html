@@ -145,14 +145,106 @@
             border-radius: 4px;
         }
 
+        /* --- Info Box Styling (Selalu Tampil) --- */
+        .info-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+
+        .info-box-title {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-box-content {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .info-box-content p {
+            margin-bottom: 15px;
+        }
+
+        .info-box-content ul {
+            list-style: disc;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-box-content ul li {
+            margin-bottom: 8px;
+        }
+
+        .info-box-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .info-box-content h4 {
+            margin-top: 15px;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .info-box-content .section {
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+
+        .info-box-content a {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .info-box-content a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .info-box {
+                max-width: 100%;
+                position: relative;
+                top: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
 
     <h1>Interactive Investor Impact Bubble Chart</h1>
 
-    <div class="chart-container">
-        <canvas id="myBubbleChart"></canvas>
+    <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; justify-content: center; padding: 20px;">
+        <div class="chart-container">
+            <canvas id="myBubbleChart"></canvas>
+        </div>
+
+        <div id="infoBox" class="info-box">
+            <h2 id="infoBoxTitle" class="info-box-title">Hover pada bubble untuk melihat detail</h2>
+            <div id="infoBoxContent" class="info-box-content">
+                <p>Gerakkan mouse ke atas bubble untuk melihat informasi cluster.</p>
+            </div>
+        </div>
     </div>
 
     <div id="dataModal" class="modal">
