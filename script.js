@@ -157,9 +157,9 @@ const chartData = {
             backgroundColor: 'rgba(128, 0, 128, 0.3)',
             borderColor: 'purple',
             data: [{
-                x: 15,
-                y: 20,
-                r: 30,
+                x: 18,
+                y: 22,
+                r: 35,
                 label: 'G',
                 title: 'Cluster G: Avoid Harm with Traditional and Signal Financial ESG Investor Contribution',
                 details: `
@@ -192,9 +192,9 @@ const chartData = {
             backgroundColor: 'rgba(128, 0, 128, 0.5)',
             borderColor: 'purple',
             data: [{
-                x: 15,
-                y: 15,
-                r: 38, // I jauh lebih besar dari G
+                x: 13,
+                y: 18,
+                r: 48, // I jauh lebih besar dari G
                 label: 'I',
                 title: 'Cluster I: Mixed ABC Classification with Traditional and Signal Values Investor Contribution',
                 details: `
