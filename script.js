@@ -4,8 +4,21 @@ Chart.register(ChartDataLabels);
 
 const ctx = document.getElementById('myBubbleChart').getContext('2d');
 
+// --- FUNGSI UNTUK SCALE BUBBLE DI MOBILE ---
+function getBubbleScale() {
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    if (isSmallMobile) {
+        return 0.7; // Scale 0.7 untuk mobile kecil
+    } else if (isMobile) {
+        return 0.8; // Scale 0.8 untuk tablet/mobile
+    }
+    return 1.0; // Full size untuk desktop
+}
+
 // --- DATA UNTUK CHART ---
-const chartData = {
+const originalChartData = {
     datasets: [
         {
             label: 'Cluster A',
@@ -253,6 +266,24 @@ const chartData = {
     ]
 };
 
+// --- FUNGSI UNTUK APPLY SCALE KE BUBBLE DATA ---
+function scaleBubbleData(data, scale) {
+    const scaledData = JSON.parse(JSON.stringify(data)); // Deep copy
+    
+    scaledData.datasets.forEach(dataset => {
+        dataset.data.forEach(bubble => {
+            if (bubble.r) {
+                bubble.r = Math.round(bubble.r * scale);
+            }
+        });
+    });
+    
+    return scaledData;
+}
+
+// Apply scale berdasarkan screen size saat ini
+let currentBubbleScale = getBubbleScale();
+const chartData = scaleBubbleData(originalChartData, currentBubbleScale);
 
 // --- KONFIGURASI CHART.JS ---
 const myBubbleChart = new Chart(ctx, {
@@ -262,6 +293,14 @@ const myBubbleChart = new Chart(ctx, {
         responsive: true,
         maintainAspectRatio: false, // Penting agar bisa menyesuaikan ukuran di dalam container
         backgroundColor: '#f0f5ff', // Background chart putih kebiruan
+        layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10
+            }
+        },
         plugins: {
             title: {
                 display: true,
@@ -419,3 +458,33 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+// Resize chart saat window resize (penting untuk mobile)
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    if (myBubbleChart) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newScale = getBubbleScale();
+            
+            // Jika scale berubah (misal dari desktop ke mobile), update bubble sizes
+            if (Math.abs(newScale - currentBubbleScale) > 0.01) {
+                const newChartData = scaleBubbleData(originalChartData, newScale);
+                myBubbleChart.data = newChartData;
+                currentBubbleScale = newScale;
+                myBubbleChart.update('none'); // Update tanpa animation
+            } else {
+                myBubbleChart.resize();
+            }
+        }, 250); // Debounce untuk performa
+    }
+});
+
+// Force resize setelah load untuk mobile
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (myBubbleChart) {
+            myBubbleChart.resize();
+        }
+    }, 500);
+});
